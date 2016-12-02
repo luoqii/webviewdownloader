@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             return super.shouldInterceptRequest(view, request);
         }
 
-        private void startExternalDownloader(WebResourceRequest request, String mimeInHeader) {
+        private void startExternalDownloader(WebResourceRequest request, String mimeFromExtension) {
             Intent intent = new Intent(Intent.ACTION_SEND);
 //                    intent.setAction(Intent.ACTION_VIEW);
 //                    intent.setData(request.getUrl());
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(Intent.EXTRA_SUBJECT, "downalod");
             intent.putExtra(Intent.EXTRA_TEXT, request.getUrl().toString());
 
-            intent.setType(mimeInHeader);
+            intent.setType(mimeFromExtension);
 //                    intent.setType("video/*");
 //                    ClipDescription clipDesc = new ClipDescription("download_title", new String[]{mime});
 //                    ClipData clip = new ClipData(clipDesc, new ClipData.Item(request.getUrl().toString()));

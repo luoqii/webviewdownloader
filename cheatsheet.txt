@@ -1,0 +1,2 @@
+# install all apk
+./gradlew installDevDebug installADebug installBDebug installCDebug installDDebug installEDebug installFDebug installGDebug

@@ -17,6 +17,48 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+    productFlavors {
+        dev {
+
+        }
+
+        a {
+            applicationIdSuffix ".b"
+        }
+        b {
+            applicationIdSuffix ".a"
+        }
+        c {
+            applicationIdSuffix ".c"
+        }
+        d {
+            applicationIdSuffix ".d"
+        }
+        e {
+            applicationIdSuffix ".e"
+        }
+        f {
+            applicationIdSuffix ".f"
+        }
+        g {
+            applicationIdSuffix ".g"
+        }
+
+    }
+
+    sourceSets {
+
+        dev.setRoot('buildFlavor/dev')
+        a.setRoot('buildFlavor/a')
+        b.setRoot('buildFlavor/b')
+        c.setRoot('buildFlavor/c')
+        d.setRoot('buildFlavor/d')
+        e.setRoot('buildFlavor/e')
+        f.setRoot('buildFlavor/f')
+        g.setRoot('buildFlavor/g')
+    }
 }
 
 dependencies {

@@ -21,3 +21,18 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+//task (installAll){
+//    dependsOn installADebug
+//}
+
+//task taskX {
+//    doLast {
+//        println 'taskX'
+//    }
+//}
+//
+//taskX.dependsOn {
+//     tasks.findAll { task -> task.name.startsWith('install') }
+//    dependsOn installADebug
+//}

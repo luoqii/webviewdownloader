@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         String url;
         url = ("http://91.b9d.club/index.php");
 //        url = ("http://youku.com");
-//        url = ("http://www.baidu.com");
+        url = ("http://www.baidu.com");
 
         File urlFile = new File(Environment.getExternalStorageDirectory(), "url.txt");
         String line = null;

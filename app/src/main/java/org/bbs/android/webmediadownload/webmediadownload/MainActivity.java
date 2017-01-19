@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             if (index > 0) {
                 String extension = path.substring(index + 1);
                 mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
-                Log.d(TAG, "mime:" + mime + "\textension:" + extension + "\t url:" + url);
+//                Log.d(TAG, "mime:" + mime + "\textension:" + extension + "\t url:" + url);
             }
 
             return mime;

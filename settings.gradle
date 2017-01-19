@@ -1,1 +1,4 @@
-include ':app'
+include ':app', ':downloadui'
+
+project(":app").name = 'HtmlViewer'
+project(":downloadui").name = 'DownloadUI'

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     @NonNull
     private String getStartUrl() {
         String url;
-        url = ("http://91.b9d.club/index.php");
+//        url = ("http://91.b9d.club/index.php");
 //        url = ("http://youku.com");
         url = ("http://www.baidu.com");
 
@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
         private void saveUrl(String url, String fileName) {
             Log.d(TAG, "fileName:" + fileName);
+            fileName += ".txt";
             File dir = new File(Environment.getExternalStorageDirectory(), "wmd");
             dir.mkdirs();
             File urlFile = new File(dir, fileName);

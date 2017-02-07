@@ -2,6 +2,7 @@ package org.bbs.android.webmediadownload.webmediadownload;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -17,6 +18,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 
 import org.apache.http.params.HttpParams;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -26,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +47,34 @@ public class MainActivity extends AppCompatActivity {
         initWebView(mWebView);
 
         String url = getStartUrl();
+        String action = getIntent().getAction();
+        Uri uri = getIntent().getData();
+        Log.d(TAG, "action:" + action);
+        Log.d(TAG, "data  :" + uri);
+        if (Intent.ACTION_VIEW.equals(action)
+                && null != uri
+                && !TextUtils.isEmpty(uri.toString())
+                && ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
+            String line = null;
+            BufferedReader r = null;
+            try {
+                r = new BufferedReader(new InputStreamReader(getContentResolver().openInputStream(uri)));
+                while ((line = r.readLine()) != null) {
+                    if (!TextUtils.isEmpty(line)
+                            && !line.startsWith("#")) {
+                        url = line;
+                        Log.d(TAG, "found url:" + url);
+                        break;
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        url = applyPatternReplace(url);
         mWebView.loadUrl(url);
     }
 
@@ -88,6 +119,18 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
+    }
+
+    private String applyPatternReplace(String url) {
+        Log.d(TAG, "before url:" + url);
+        for (String key : App.REPLACE_PATTERN.keySet()) {
+            if (url.contains(key)) {
+                url = url.replace(key, App.REPLACE_PATTERN.get(key));
+            }
+        }
+
+        Log.d(TAG, "after  url:" + url);
+        return url;
     }
 
     class WebViewClient extends android.webkit.WebViewClient {
@@ -209,18 +252,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-        }
-
-        private String applyPatternReplace(String url) {
-            Log.d(TAG, "before url:" + url);
-            for (String key : App.REPLACE_PATTERN.keySet()) {
-                if (url.contains(key)) {
-                    url = url.replace(key, App.REPLACE_PATTERN.get(key));
-                }
-            }
-
-            Log.d(TAG, "after  url:" + url);
-            return url;
         }
 
         void parseUrl(String url){

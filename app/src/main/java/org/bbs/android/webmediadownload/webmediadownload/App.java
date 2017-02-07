@@ -5,6 +5,8 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.bbs.android.commonlib.ExceptionCatcher;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +25,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
+        ExceptionCatcher.attachExceptionHandler(this);
         initReplacePattern();
     }
 

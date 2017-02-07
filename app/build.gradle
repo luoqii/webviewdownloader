@@ -67,5 +67,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.0.1'
+
+    compile 'org.bbs.android.commonlib:commonlib:0.5'
+
     testCompile 'junit:junit:4.12'
 }

@@ -1,7 +1,5 @@
 package org.bbs.android.webmediadownload.webmediadownload;
 
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,19 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import org.apache.http.params.HttpParams;
-import org.w3c.dom.Text;
+import org.bbs.android.log.Logcat_AppCompatActivity;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -116,9 +114,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initWebView(WebView webView) {
+//        webView.setInitialScale();
         webView.setWebViewClient(new WebViewClient());
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setBuiltInZoomControls(true);
+        WebSettings setting = webView.getSettings();
+        setting.setJavaScriptEnabled(true);
+        setting.setBuiltInZoomControls(true);
+        setting.setUseWideViewPort(true);
+        setting.setLoadWithOverviewMode(true);
     }
 
     private String applyPatternReplace(String url) {
@@ -131,6 +133,30 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "after  url:" + url);
         return url;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        Log.d(TAG, "onOptionsItemSelected. id:" + id);
+        if (id == R.id.action_logcat){
+//            Logcat_FragmentActivity.start(this);
+            Logcat_AppCompatActivity.start(this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     class WebViewClient extends android.webkit.WebViewClient {
@@ -160,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-//            Log.d(TAG, "shouldInterceptRequest. url:" + request.getUrl());
+            Log.d(TAG, "shouldInterceptRequest. url:" + request.getUrl());
             String mime= mime(request.getUrl().toString());
             if (!TextUtils.isEmpty(mime)) {
                 if (mime.startsWith("image")) {
@@ -278,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String mime(String url){
+            url = normalize(url);
             String mime = null;
             Uri uri = Uri.parse(url);
             String path = uri.getPath();
@@ -289,6 +316,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             return mime;
+        }
+
+        private String normalize(String url) {
+            if (url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+                return normalize(url);
+            }
+
+            return url;
         }
     }
 }

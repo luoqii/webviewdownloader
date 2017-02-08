@@ -69,6 +69,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.1'
 
     compile 'org.bbs.android.commonlib:commonlib:0.5'
+    compile 'org.bbs.android:log:0.6_rc5'
 
     testCompile 'junit:junit:4.12'
 }

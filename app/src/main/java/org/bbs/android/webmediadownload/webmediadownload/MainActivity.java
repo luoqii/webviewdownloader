@@ -187,21 +187,41 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
             Log.d(TAG, "shouldInterceptRequest. url:" + request.getUrl());
+            processUrl(request);
+
+            String url = request.getUrl().toString();
+            for (String deny: App.DENIED_HOST) {
+                if (url.contains(deny)) {
+                    return new WebResourceResponse("text/plain", "hack", null);
+                }
+            }
+
+            return super.shouldInterceptRequest(view, request);
+        }
+
+        private void processUrl(WebResourceRequest request) {
+            String url = request.getUrl().toString();
+
+            for (String deny: App.DENIED_HOST) {
+                if (url.contains(deny)) {
+                    Log.d(TAG,"deny url:" + url);
+                    return;
+                }
+            }
             String mime= mime(request.getUrl().toString());
             if (!TextUtils.isEmpty(mime)) {
                 if (mime.startsWith("image")) {
 //                    return new WebResourceResponse("hack", "", null);
                 }
                 if (mime.startsWith("video")) {
-                    String url = request.getUrl().toString();
+                    Log.d(TAG, "video url:" + url);
                     if (!url.equals(mLastUrl)) {
-                        postStartActivity(request.getUrl().toString(), mime);
+                        postStartActivity(url, mime);
                     }
 
                     mLastUrl = url;
                 }
             }
-            return super.shouldInterceptRequest(view, request);
         }
 
         void postStartActivity(final String url, final String mime) {

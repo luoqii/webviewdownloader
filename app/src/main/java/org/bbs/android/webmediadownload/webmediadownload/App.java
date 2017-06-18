@@ -4,9 +4,9 @@ import android.app.Application;
 import android.media.DeniedByServerException;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.bbs.android.commonlib.ExceptionCatcher;
+import org.bbs.android.log.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,6 +23,7 @@ import java.util.Map;
  */
 public class App extends Application {
     private static final String TAG = App.class.getSimpleName();
+    public static File CONFIG_DIR;
     public static Map<String, String> REPLACE_PATTERN = new HashMap<>();
     public static List<String> DENIED_HOST = new ArrayList();
 
@@ -31,12 +32,16 @@ public class App extends Application {
         super.onCreate();
 
         ExceptionCatcher.attachExceptionHandler(this);
-        initReplacePattern();
-        initDeniedHost();
+
+        CONFIG_DIR = Environment.getExternalStorageDirectory();
+        Log.d(TAG, "config dir:" + CONFIG_DIR.getPath());
+        initReplacePattern(CONFIG_DIR);
+        initDeniedHost(CONFIG_DIR);
     }
 
-    void initReplacePattern() {
-        File urlFile = new File(Environment.getExternalStorageDirectory(), "url.replace.txt");
+    void initReplacePattern(File configDir) {
+        File urlFile = new File(configDir, "url.replace.txt");
+        Log.d(TAG, "url.replace.txt:" + urlFile);
         String line = null;
         BufferedReader r = null;
         try {
@@ -56,8 +61,9 @@ public class App extends Application {
         }
     }
 
-    static public void  initDeniedHost() {
-        File urlFile = new File(Environment.getExternalStorageDirectory(), "url.denied.txt");
+    static public void  initDeniedHost(File configDir) {
+        File urlFile = new File(configDir, "url.denied.txt");
+        Log.d(TAG, "url.denied.txt:" + urlFile);
         String line = null;
         BufferedReader r = null;
         try {

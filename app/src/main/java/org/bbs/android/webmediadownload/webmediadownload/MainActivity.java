@@ -79,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
     @NonNull
     private String getStartUrl() {
         String url;
-//        url = ("http://91.b9d.club/index.php");
 //        url = ("http://youku.com");
         url = ("http://www.baidu.com");
 
-        File urlFile = new File(Environment.getExternalStorageDirectory(), "url.txt");
+        File urlFile = new File(App.CONFIG_DIR, "url.txt");
+        org.bbs.android.log.Log.d(TAG, "url.txt:" + urlFile);
         String line = null;
         BufferedReader r = null;
         try {
